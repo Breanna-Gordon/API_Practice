@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- Show title -->
+  <h1>{{ show.name }}</h1>
+
+  <!-- Show image -->
+  <img src="{{ show.image or '' }}" alt="{{ show.name }}" style="max-width: 400px;">
+  
+  <!-- Show details -->
+  <p><strong>Genres:</strong> {{ show.genres }}</p>
+  <p><strong>Rating:</strong> {{ show.rating or 'N/A' }}</p>
+  <p><strong>Premiered:</strong> {{ show.premiered or 'Unknown' }}</p>
+  <p><strong>Language:</strong> {{ show.language or 'N/A' }}</p>
+  <p><strong>Country:</strong> {{ show.country or 'N/A' }}</p>
+  <p><strong>Runtime:</strong> {{ show.runtime or 'N/A' }} minutes</p>
+  <p><strong>Network:</strong> {{ show.network or 'N/A' }}</p>
+
+  <!-- Summary may contain HTML so |safe is used to render it correctly -->
+  <p><strong>Summary:</strong> {{ show.summary | safe }}</p>
+
+  <!-- Link to go back to the homepage -->
+  <a href="/">← Back to Home</a>
+{% endblock %}
+
+

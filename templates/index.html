@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Sidebar CSS -->
+<style>
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -350px;
+  width: 300px;
+  height: 100%;
+  background: #4d026f;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  padding: 30px 20px 20px 20px;
+  overflow-y: auto;
+  transition: left 0.3s;
+  z-index: 2000;
+}
+.sidebar.open {
+  left: 0;
+}
+.sidebar form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+.sidebar form select,
+.sidebar form button {
+  margin-bottom: 10px;
+  width: 100%;
+}
+</style>
+
+<!-- Page title -->
+<h1><a href="/" style="color: #2d5fdd; text-decoration: none;">🎬 DPR</a></h1>
+
+<!-- Search form-->
+<form action="/search" method="get" style="margin-bottom: 20px;">
+  <input type="text" name="q" placeholder="Search shows..." />
+  <button type="submit">Search</button>
+</form>
+
+<!-- Button to toggle filter sidebar -->
+<button onclick="document.getElementById('filterSidebar').classList.toggle('open')" 
+        style="position: fixed; top: 20px; left: 20px; z-index: 2100;">🔍 Filters</button>
+
+<!-- Filter sidebar -->
+<div id="filterSidebar" class="sidebar">
+  <form action="/" method="get" style="display: flex; flex-direction: column;">
+    <label for="genre">Genre:</label>
+    <select name="genre" id="genre">
+      <option value="">All</option>
+      {% for genre in genres %}
+        <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>{{ genre }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="showType">Show Type:</label>
+    <select name="showType" id="showType">
+      <option value="">All</option>
+      {% for t in show_types %}
+        <option value="{{ t }}" {% if t == selected_show_type %}selected{% endif %}>{{ t }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort">
+      <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name</option>
+      <option value="popularity" {% if selected_sort == 'popularity' %}selected{% endif %}>Popularity</option>
+      <option value="release" {% if selected_sort == 'release' %}selected{% endif %}>Release Date</option>
+      <option value="highest" {% if selected_sort == 'highest' %}selected{% endif %}>Highest Rated</option>
+      <option value="lowest" {% if selected_sort == 'lowest' %}selected{% endif %}>Lowest Rated</option>
+    </select>
+
+    <label for="year">Year:</label>
+    <select name="year" id="year">
+      <option value="">All</option>
+      {% for y in years %}
+        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="language">Language:</label>
+    <select name="language" id="language">
+      <option value="">All</option>
+      {% for lang in languages %}
+        <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ lang }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="country">Country:</label>
+    <select name="country" id="country">
+      <option value="">All</option>
+      {% for c in countries %}
+        <option value="{{ c }}" {% if c == selected_country %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="runtime">Runtime:</label>
+    <select name="runtime" id="runtime">
+      <option value="">All</option>
+      <option value="short" {% if selected_runtime == 'short' %}selected{% endif %}>≤ 30 min</option>
+      <option value="medium" {% if selected_runtime == 'medium' %}selected{% endif %}>31–60 min</option>
+      <option value="long" {% if selected_runtime == 'long' %}selected{% endif %}>Over 60 min</option>
+    </select>
+
+    <label for="network">Network:</label>
+    <select name="network" id="network">
+      <option value="">All</option>
+      {% for net in networks %}
+        <option value="{{ net }}" {% if net == selected_network %}selected{% endif %}>{{ net }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Filter</button>
+  </form>
+</div>
+
+<!--  Close sidebar when clicking outside -->
+<script>
+document.addEventListener('click', function(event) {
+  var sidebar = document.getElementById('filterSidebar');
+  var button = event.target.closest('button');
+  if (!sidebar.contains(event.target) && !button) {
+    sidebar.classList.remove('open');
+  }
+});
+</script>
+
+<hr>
+
+<!-- Show list -->
+<h2>Shows</h2>
+{% for show in shows %}
+  <div class="show">
+    <a href="/show/{{ show.id }}">
+      <img src="{{ show.image or '' }}" alt="{{ show.name }}">
+      <p>{{ show.name }}</p>
+    </a>
+  </div>
+{% endfor %}
+
+<!-- Pagination -->
+{% if total_pages > 1 %}
+<footer style="margin-top: 40px; text-align: center;">
+  <div>
+    {% set start = current_page - 3 if current_page > 3 else 1 %}
+    {% set end = current_page + 3 if current_page + 3 < total_pages else total_pages %}
+
+    {% if current_page > 1 %}
+      <!-- First and previous page numbers -->
+      <a href="?genre={{ selected_genre }}&showType={{ selected_show_type }}&sort={{ selected_sort }}&year={{ selected_year }}&language={{ selected_language }}&country={{ selected_country }}&runtime={{ selected_runtime }}&network={{ selected_network }}&page=1" class="pagination-button">« First</a>
+      <a href="?genre={{ selected_genre }}&showType={{ selected_show_type }}&sort={{ selected_sort }}&year={{ selected_year }}&language={{ selected_language }}&country={{ selected_country }}&runtime={{ selected_runtime }}&network={{ selected_network }}&page={{ current_page - 1 }}" class="pagination-button">‹ Prev</a>
+    {% endif %}
+
+    {% if start > 1 %}
+      <span class="pagination-button">...</span>
+    {% endif %}
+
+    {% for p in range(start, end + 1) %}
+      <!-- Numbered page numbers -->
+      <a href="?genre={{ selected_genre }}&showType={{ selected_show_type }}&sort={{ selected_sort }}&year={{ selected_year }}&language={{ selected_language }}&country={{ selected_country }}&runtime={{ selected_runtime }}&network={{ selected_network }}&page={{ p }}"
+         class="pagination-button {% if p == current_page %}pagination-active{% else %}pagination-inactive{% endif %}">
+        {{ p }}
+      </a>
+    {% endfor %}
+
+    {% if end < total_pages %}
+      <span class="pagination-button">...</span>
+    {% endif %}
+
+    {% if current_page < total_pages %}
+      <!-- Next and last page buttons -->
+      <a href="?genre={{ selected_genre }}&showType={{ selected_show_type }}&sort={{ selected_sort }}&year={{ selected_year }}&language={{ selected_language }}&country={{ selected_country }}&runtime={{ selected_runtime }}&network={{ selected_network }}&page={{ current_page + 1 }}" class="pagination-button">Next ›</a>
+      <a href="?genre={{ selected_genre }}&showType={{ selected_show_type }}&sort={{ selected_sort }}&year={{ selected_year }}&language={{ selected_language }}&country={{ selected_country }}&runtime={{ selected_runtime }}&network={{ selected_network }}&page={{ total_pages }}" class="pagination-button">Last »</a>
+    {% endif %}
+  </div>
+</footer>
+{% endif %}
+
+{% endblock %}

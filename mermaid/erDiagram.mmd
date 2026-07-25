@@ -1,0 +1,33 @@
+erDiagram
+    TV_SHOWS {
+        int ShowID PK
+        string Title
+        int ReleaseYear
+        int GenreID FK
+    }
+    GENRES {
+        int GenreID PK
+        string GenreName
+    }
+    EPISODES {
+        int EpisodeID PK
+        int ShowID FK
+        string Title
+        int Season
+        int EpisodeNumber
+        string AirDate
+    }
+    ACTORS {
+        int ActorID PK
+        string Name
+        int BirthYear
+    }
+    SHOW_ACTORS {
+        int EpisodeID FK
+        int ActorID FK
+    }
+
+    TV_SHOWS ||--o{ EPISODES : "has"
+    TV_SHOWS }o--|| GENRES : "belongs to"
+    EPISODES ||--o{ SHOW_ACTORS : "has"
+    ACTORS ||--o{ SHOW_ACTORS : "acts in"

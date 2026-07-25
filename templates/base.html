@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DPR</title>
+  <!-- Import Orbiton font from Google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0b0c10;
+      color: #c5c6c7;
+      margin: 40px;
+    }
+    h1, h2 {
+      color: #66fcf1;
+      text-shadow: 0 0 5px #66fcf1;
+    }
+    a {
+      color: #66fcf1;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .show {
+      display: inline-block;
+      width: 180px;
+      margin: 15px;
+      text-align: center;
+      vertical-align: top;
+      background-color: #1f2833;
+      border-radius: 10px;
+      padding: 10px;
+      transition: transform 0.2s ease-in-out, box-shadow 0.3s ease;
+    }
+    .show:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px #9b59b6;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    form {
+      margin-bottom: 30px;
+    }
+    select, input[type="text"], button {
+      background-color: #1f1f1f;
+      color: #fff;
+      border: 1px solid #9b59b6;
+      border-radius: 5px;
+      padding: 8px 12px;
+      margin: 5px;
+      font-family: 'Orbitron', sans-serif;
+    }
+    button {
+      background-color: #9b59b6;
+      cursor: pointer;
+      box-shadow: 0 0 5px #9b59b6;
+    }
+    button:hover {
+      background-color: #8e44ad;
+      box-shadow: 0 0 15px #9b59b6;
+    }
+    hr {
+      border: 1px solid #45a29e;
+      margin-bottom: 20px;
+    }
+
+    /* Pagination button styles */
+    .pagination-button {
+      display: inline-block;
+      margin: 5px;
+      padding: 8px 14px;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid #9b59b6;
+      transition: 0.3s ease;
+    }
+    .pagination-active {
+      background-color: #9b59b6;
+      color: white;
+    }
+    .pagination-inactive {
+      color: #9b59b6;
+    }
+
+    /* Title styling */
+    h1 a {
+      font-size: 32px;
+      font-weight: 600;
+      text-shadow: 0 0 10px #2d5fdd;
+    }
+  </style>
+</head>
+<body>
+  
+  <hr>
+  {% block content %}{% endblock %} <!-- Placeholder for content from child tamplates --> 
+</body>
+</html>
